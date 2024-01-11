@@ -8,7 +8,7 @@ import (
 	kingpin "github.com/alecthomas/kingpin/v2"
 	"github.com/digitalocean/go-libvirt"
 	"github.com/go-kit/log/level"
-	exporter "github.com/inovex/prometheus-libvirt-exporter/pkg/exporter"
+	exporter "github.com/knm-io/prometheus-libvirt-exporter/pkg/exporter"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/prometheus/common/promlog"
@@ -36,7 +36,12 @@ func main() {
 
 	promlogConfig := &promlog.Config{}
 	flag.AddFlags(kingpin.CommandLine, promlogConfig)
-	kingpin.Version(version.Print("libvirt_exporter"))
+	kingpin.Version(version.Version)
+	kingpin.Flag("version-long", "Print detailed version info").PreAction(func(pc *kingpin.ParseContext) error {
+		fmt.Fprintln(os.Stderr, version.Print("prometheus-libvirt-exporter"))
+		os.Exit(0)
+		return nil
+	}).Bool()
 	kingpin.HelpFlag.Short('h')
 	kingpin.Parse()
 	logger := promlog.New(promlogConfig)
