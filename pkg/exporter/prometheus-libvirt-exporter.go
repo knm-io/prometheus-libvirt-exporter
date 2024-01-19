@@ -358,7 +358,7 @@ func CollectDomain(ch chan<- prometheus.Metric, l *libvirt.Libvirt, domain domai
 		return err
 	}
 	if isActive != 1 {
-		_ = level.Info(logger).Log("err", "domain is not active")
+		_ = level.Info(logger).Log("info", "domain is not active: "+domain.domainName)
 		return nil
 	}
 
